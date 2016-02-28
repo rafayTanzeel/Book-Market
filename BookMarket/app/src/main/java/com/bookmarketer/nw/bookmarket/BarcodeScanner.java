@@ -27,7 +27,7 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
 
     // use a compound button so either checkbox or switch widgets work.
 
-    private static final String ISBN= "https://www.googleapis.com/books/v1/volumes?q=isbn:";
+    private static final String ISBN= "https://www.googleapis.com/books/v1/volumes";
     private CompoundButton autoFocus;
     private CompoundButton useFlash;
     private TextView statusMessage;
@@ -99,8 +99,14 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
                     statusMessage.setText(R.string.barcode_success);
 
                     if(isOnline()) {
+                        RequestPackage p =new RequestPackage();
+                        p.setMethod("GET");
+                        p.setUri(ISBN);
+                        p.setParam("q","isbn:"+"0747532699"/*barcode.displayValue*/);
+                       // ?q=isbn:
+
                         ExtractBookData bookInfo = new ExtractBookData();
-                        bookInfo.execute(ISBN + /*"0747532699"*/barcode.displayValue);
+                        bookInfo.execute(p);
                     }
                     else{
                         Toast.makeText(this, "Please Connect to Internet", Toast.LENGTH_LONG).show();
@@ -134,12 +140,11 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    class ExtractBookData extends AsyncTask<String, String, String>{
+    class ExtractBookData extends AsyncTask<RequestPackage, String, String>{
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(RequestPackage... params) {
             String jsonData = httpManager.getData(params[0]);
-
             return jsonData;
         }
 
