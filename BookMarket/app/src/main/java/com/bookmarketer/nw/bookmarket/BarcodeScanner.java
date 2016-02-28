@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.*;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -141,6 +140,9 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(BookInfo s) {
+
+            findViewById(R.id.read_barcode).setVisibility(View.INVISIBLE);
+            findViewById(R.id.submit_book).setVisibility(View.VISIBLE);
 
             titleText.setText(s.getTitle());
             authorText.setText(s.getAuthors());
