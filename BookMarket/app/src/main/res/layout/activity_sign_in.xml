@@ -2,12 +2,13 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@drawable/bg_gradient"
     android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/timessquare"
+
         android:scaleType = "centerCrop"/>
 
 <RelativeLayout
@@ -24,10 +25,11 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_centerHorizontal="true"
-        android:text="WELCOME TO BOOK MARKET"
+        android:text="BOOK MARKET"
         android:id="@+id/status"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textSize="30sp" />
 
     <com.google.android.gms.common.SignInButton
     android:id="@+id/sign_in_button"
@@ -92,8 +94,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/barcodePage"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:layout_below="@+id/status">
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -106,16 +108,6 @@
         android:src="@drawable/nobody"
         app:civ_border_color="#FF000000"/>
     </FrameLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Barcode Scanner"
-        android:id="@+id/barcodePage"
-        android:layout_below="@+id/status"
-        android:layout_centerHorizontal="true" />
-
-
 
 
 </RelativeLayout>

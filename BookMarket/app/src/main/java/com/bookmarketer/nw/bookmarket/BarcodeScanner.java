@@ -52,13 +52,12 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
             // launch barcode activity.
             Intent intent = new Intent(this, BarcodeCaptureActivity.class);
             intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
-            intent.putExtra(BarcodeCaptureActivity.UseFlash, true);
+            intent.putExtra(BarcodeCaptureActivity.UseFlash, false);
             startActivityForResult(intent, RC_BARCODE_CAPTURE);
         } else if (v.getId() == R.id.submit_book) {
+
             PostBooksData bookDatePost = new PostBooksData();
             bookDatePost.execute(d);
-            submit.setEnabled(true);
-
 
             if (jsonData.contains("1")) {
                 Toast.makeText(this, "Book Posted Successfully", Toast.LENGTH_LONG).show();
@@ -137,7 +136,7 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(BookInfo s) {
 
             findViewById(R.id.read_barcode).setVisibility(View.INVISIBLE);
-            submit.setVisibility(View.VISIBLE);
+
 
             titleText.setText(s.getTitle());
             authorText.setText(s.getAuthors());
@@ -153,6 +152,8 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
             d.setParam("publisher", publisher);
             d.setParam("bookUrl", bookURL);
             d.setParam("method", "upload");
+            submit.setVisibility(View.VISIBLE);
+            submit.setEnabled(true);
         }
     }
 
