@@ -36,7 +36,7 @@ import java.net.URL;
 public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
     private static final String TAG = "SignInActivity";
-    private static final int RC_SIGN_IN = 9001;
+    private static final int RC_SIGN_IN = 9000;
 
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatus;
@@ -46,7 +46,7 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
     private Button disconnect;
     private Button proceed;
     private ImageView imageView;
-
+    private Button barcodePage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,12 +68,13 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
         disconnect = (Button) findViewById(R.id.disconnect_button);
         proceed = (Button) findViewById(R.id.nextPage);
         imageView = (ImageView) findViewById(R.id.imageView);
+        barcodePage = (Button) findViewById(R.id.barcodePage);
 
         signIn.setOnClickListener(this);
         signOut.setOnClickListener(this);
         disconnect.setOnClickListener(this);
         proceed.setOnClickListener(this);
-
+        barcodePage.setOnClickListener(this);
     }
 
     @Override
@@ -154,7 +155,12 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
             mStatus.setText(account.getDisplayName() + "is Signed In");
-            
+
+            String email= account.getEmail();
+            String username = account.getDisplayName();
+            String TokenId = account.getIdToken();
+
+
             DownLoadImage image=new DownLoadImage();
             image.execute(account.getPhotoUrl().toString());
             updateUI(true);
@@ -201,12 +207,21 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
             case R.id.nextPage:
                 goToNextPage();
                 break;
+            case R.id.barcodePage:
+                goToBarcodePage();
+                break;
         }
     }
 
 
     private void goToNextPage() {
         Intent i = new Intent(this, MainMenu.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void goToBarcodePage(){
+        Intent i = new Intent(this, BarcodeScanner.class);
         startActivity(i);
     }
 
