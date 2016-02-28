@@ -50,7 +50,7 @@ public class RequestPackage {
 
     public  String getEncodedParams(){
 
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb=new StringBuilder("");
         for(String key : params.keySet()){
             String value = null;
             try {

@@ -26,7 +26,10 @@ public class MainMenu extends AppCompatActivity {
     private Button mActiveBtn;
     private Button mlogOutBtn;
     private Button mChatBtn;
+
     public ListView mList;
+
+    private String TokenId;
     private EditText mSearchText;
     private String jsonScript;
     private final String SERVER_URL="http://rafaytanzeel.com/bookMarket/bookMethods.php";
@@ -42,12 +45,17 @@ public class MainMenu extends AppCompatActivity {
         mActiveBtn = (Button) findViewById(R.id.activeBtn);
         mlogOutBtn = (Button) findViewById(R.id.logoutBtn);
         mChatBtn = (Button) findViewById(R.id.chatBtn);
+
+
+        TokenId = getIntent().getStringExtra("TOKEN_ID");
+
         mSearchText = (EditText) findViewById(R.id.searchText);
         mSearchSubmitBtn = (Button) findViewById(R.id.searchSubmitBtn);
         mUploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), BarcodeScanner.class);
+                i.putExtra("TOKEN_ID", TokenId);
                 startActivity(i);
                 finish();
             }

@@ -59,11 +59,9 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
             PostBooksData bookDatePost = new PostBooksData();
             bookDatePost.execute(d);
 
-            if (jsonData.contains("1")) {
+
                 Toast.makeText(this, "Book Posted Successfully", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Failed To Submit Book", Toast.LENGTH_LONG).show();
-            }
+
 
         }
 
@@ -151,6 +149,7 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
             d.setParam("author", authorText.getText().toString());
             d.setParam("publisher", publisher);
             d.setParam("bookUrl", bookURL);
+            d.setParam("price",((EditText)findViewById(R.id.price)).getText().toString());
             d.setParam("method", "upload");
             submit.setVisibility(View.VISIBLE);
             submit.setEnabled(true);
@@ -164,13 +163,8 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
         protected Void doInBackground(RequestPackage... params) {
             Log.d("hi", "hi");
             jsonData = httpManager.getData(params[0]);
-            //Log.d("JSON", jsonData);
+            Log.d("JSON", jsonData);
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
         }
     }
 
