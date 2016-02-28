@@ -15,6 +15,8 @@ import java.net.URL;
  */
 public class httpManager {
 
+    String results="";
+
     public static String getData(RequestPackage p) {
 
         String uri = p.getUri();

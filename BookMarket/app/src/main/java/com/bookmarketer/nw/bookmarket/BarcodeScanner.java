@@ -153,7 +153,6 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
             d.setParam("bookUrl", bookURL);
             d.setParam("method", "upload");
             submit.setVisibility(View.VISIBLE);
-            submit.setEnabled(true);
         }
     }
 
@@ -164,13 +163,8 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
         protected Void doInBackground(RequestPackage... params) {
             Log.d("hi", "hi");
             jsonData = httpManager.getData(params[0]);
-            //Log.d("JSON", jsonData);
+            Log.d("JSON", jsonData);
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
         }
     }
 
