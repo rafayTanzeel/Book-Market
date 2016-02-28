@@ -59,7 +59,7 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
             PostBooksData bookDatePost = new PostBooksData();
             bookDatePost.execute(d);
 
-            
+
                 Toast.makeText(this, "Book Posted Successfully", Toast.LENGTH_LONG).show();
 
 
@@ -149,6 +149,7 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
             d.setParam("author", authorText.getText().toString());
             d.setParam("publisher", publisher);
             d.setParam("bookUrl", bookURL);
+            d.setParam("price",((EditText)findViewById(R.id.price)).getText().toString());
             d.setParam("method", "upload");
             submit.setVisibility(View.VISIBLE);
             submit.setEnabled(true);
