@@ -1,20 +1,33 @@
 package com.bookmarketer.nw.bookmarket;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import org.json.JSONArray;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class BarcodeScanner extends AppCompatActivity implements View.OnClickListener {
 
     // use a compound button so either checkbox or switch widgets work.
+
+    private static final String ISBN= "https://www.googleapis.com/books/v1/volumes?q=isbn:";
     private CompoundButton autoFocus;
     private CompoundButton useFlash;
     private TextView statusMessage;
@@ -84,7 +97,16 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     statusMessage.setText(R.string.barcode_success);
-                    barcodeValue.setText(barcode.displayValue);
+
+                    if(isOnline()) {
+                        ExtractBookData bookInfo = new ExtractBookData();
+                        bookInfo.execute(ISBN + /*"0747532699"*/barcode.displayValue);
+                    }
+                    else{
+                        Toast.makeText(this, "Please Connect to Internet", Toast.LENGTH_LONG).show();
+                    }
+
+//                    barcodeValue.setText(barcode.displayValue);
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
@@ -99,4 +121,35 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    protected boolean isOnline(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo= cm.getActiveNetworkInfo();
+
+        if(netInfo!=null && netInfo.isConnectedOrConnecting()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    class ExtractBookData extends AsyncTask<String, String, String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            String jsonData = httpManager.getData(params[0]);
+
+            return jsonData;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            barcodeValue.setText(s);
+//            JSONArray jarry= new JSONArray(s);
+
+        }
+    }
+
+
 }
