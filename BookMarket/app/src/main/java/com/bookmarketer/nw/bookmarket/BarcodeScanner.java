@@ -1,9 +1,7 @@
 package com.bookmarketer.nw.bookmarket;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -17,11 +15,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
-
-import org.json.JSONArray;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class BarcodeScanner extends AppCompatActivity implements View.OnClickListener {
 
@@ -140,17 +133,19 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    class ExtractBookData extends AsyncTask<RequestPackage, String, String>{
+    class ExtractBookData extends AsyncTask<RequestPackage, String, BookInfo>{
 
         @Override
-        protected String doInBackground(RequestPackage... params) {
+        protected BookInfo doInBackground(RequestPackage... params) {
             String jsonData = httpManager.getData(params[0]);
-            return jsonData;
+            BookInfo bookInfo = ParseJson.parse(jsonData);
+            return bookInfo;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            barcodeValue.setText(s);
+        protected void onPostExecute(BookInfo s) {
+            String str=s.getAuthors()+"\n"+s.getDesc()+"\n"+s.getPubDate()+"\n"+s.getPublisher()+"\n"+s.getThumb()+"\n"+s.getTitle();
+            barcodeValue.setText(str);
 //            JSONArray jarry= new JSONArray(s);
 
         }
