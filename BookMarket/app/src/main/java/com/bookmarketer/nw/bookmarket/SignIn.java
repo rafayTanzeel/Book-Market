@@ -46,7 +46,9 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
     private Button disconnect;
     private Button proceed;
     private ImageView imageView;
+
     private Button barcodePage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
