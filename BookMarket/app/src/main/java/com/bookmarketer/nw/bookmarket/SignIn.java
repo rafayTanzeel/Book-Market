@@ -25,6 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -38,18 +39,18 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9000;
-
+    private CropImageToRound roundedImage;
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatus;
     private ProgressDialog mProgressDialog;
-    private Button signIn;
+    private SignInButton signIn;
     private Button signOut;
     private Button disconnect;
     private Button proceed;
     private ImageView imageView;
     private Button barcodePage;
-    private final String SERVER_URL="http://rafaytanzeel.com/bookMarket/createMethods.php";
-
+    private final String SERVER_URL="http://rafaytanzeel.com/bookMarket/userMethods.php";
+//    private final String SERVER_URL= "http://rafaytanzeel.com/HackathonFetish/webservice/login.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +67,11 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
 
 
         mStatus = (TextView) findViewById(R.id.status);
-        signIn = (Button) findViewById(R.id.sign_in_button);
+        signIn = (SignInButton) findViewById(R.id.sign_in_button);
         signOut = (Button) findViewById(R.id.sign_out_button);
         disconnect = (Button) findViewById(R.id.disconnect_button);
         proceed = (Button) findViewById(R.id.nextPage);
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.profile_image);
         barcodePage = (Button) findViewById(R.id.barcodePage);
 
         signIn.setOnClickListener(this);
@@ -78,6 +79,10 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
         disconnect.setOnClickListener(this);
         proceed.setOnClickListener(this);
         barcodePage.setOnClickListener(this);
+
+        signIn = (SignInButton) findViewById(R.id.sign_in_button);
+        signIn.setSize(SignInButton.SIZE_STANDARD);
+        signIn.setScopes(gso.getScopeArray());
     }
 
     @Override
@@ -98,6 +103,9 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
                 }
             });
         }
+
+
+
     }
 
 
