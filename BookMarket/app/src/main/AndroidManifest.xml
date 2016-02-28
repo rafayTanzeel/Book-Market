@@ -16,6 +16,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainMenu"></activity>
+        <activity android:name=".UploadActivity"></activity>
+        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".ActiveActivity"></activity>
     </application>
 
 </manifest>

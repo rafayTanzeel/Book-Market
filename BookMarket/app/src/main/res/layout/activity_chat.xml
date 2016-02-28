@@ -24,8 +24,8 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_weight=".2"
-            android:text = "Chat"
-            android:id="@+id/chatBtn"
+            android:text = "Search"
+            android:id="@+id/searchBtn"
             />
         <Button
         android:layout_height="wrap_content"

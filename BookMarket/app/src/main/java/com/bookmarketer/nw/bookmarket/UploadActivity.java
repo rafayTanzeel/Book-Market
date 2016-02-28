@@ -1,14 +1,14 @@
 package com.bookmarketer.nw.bookmarket;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-public class MainMenu extends AppCompatActivity {
+public class UploadActivity extends AppCompatActivity {
 
-    private Button mUploadBtn;
+    private Button mSearchBtn;
     private Button mActiveBtn;
     private Button mlogOutBtn;
     private Button mChatBtn;
@@ -16,15 +16,15 @@ public class MainMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
-        mUploadBtn = (Button) findViewById(R.id.uploadBtn);
+        setContentView(R.layout.activity_upload);
+        mSearchBtn = (Button) findViewById(R.id.searchBtn);
         mActiveBtn = (Button) findViewById(R.id.activeBtn);
         mlogOutBtn = (Button) findViewById(R.id.logoutBtn);
         mChatBtn = (Button) findViewById(R.id.chatBtn);
-        mUploadBtn.setOnClickListener(new View.OnClickListener() {
+        mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), UploadActivity.class);
+                Intent i = new Intent(getApplicationContext(), MainMenu.class);
                 startActivity(i);
             }
         });
@@ -33,13 +33,11 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ActiveActivity.class);
                 startActivity(i);
-
             }
         });
         mlogOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
         mChatBtn.setOnClickListener(new View.OnClickListener() {
