@@ -1,13 +1,21 @@
 package com.bookmarketer.nw.bookmarket;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,11 +24,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
@@ -34,6 +45,7 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
     private Button signOut;
     private Button disconnect;
     private Button proceed;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,23 +57,22 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
                 .build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this /* OnConnectionFailedListener */)
+                .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+
         mStatus = (TextView) findViewById(R.id.status);
         signIn = (Button) findViewById(R.id.sign_in_button);
         signOut = (Button) findViewById(R.id.sign_out_button);
         disconnect = (Button) findViewById(R.id.disconnect_button);
         proceed = (Button) findViewById(R.id.nextPage);
+        imageView = (ImageView) findViewById(R.id.imageView);
 
         signIn.setOnClickListener(this);
         signOut.setOnClickListener(this);
         disconnect.setOnClickListener(this);
         proceed.setOnClickListener(this);
-//        signIn.setSize(SignInButton.SIZE_STANDARD);
-//        signIn.setScopes(gso.getScopeArray());
-
-
 
     }
 
@@ -71,7 +82,6 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
 
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         if (opr.isDone()) {
-            Toast.makeText(this, "Got cached sign-in", Toast.LENGTH_LONG).show();
             GoogleSignInResult result = opr.get();
             handleSignInResult(result);
         } else {
@@ -79,7 +89,6 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
-                    Toast.makeText(SignIn.this, "Got in onStart", Toast.LENGTH_LONG).show();
                     hideProgressDialog();
                     handleSignInResult(googleSignInResult);
                 }
@@ -89,13 +98,11 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
 
 
     private void signIn() {
-        Toast.makeText(this, "Pressed signed in button", Toast.LENGTH_LONG).show();
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     private void signOut() {
-        Toast.makeText(this, "Pressed signed out button", Toast.LENGTH_LONG).show();
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -125,7 +132,7 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
             disconnect.setVisibility(View.VISIBLE);
             proceed.setVisibility(View.VISIBLE);
         } else {
-            mStatus.setText("Signed In Please");
+            mStatus.setText("Signed In");
             signIn.setVisibility(View.VISIBLE);
             signOut.setVisibility(View.GONE);
             disconnect.setVisibility(View.GONE);
@@ -147,6 +154,9 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
             mStatus.setText(account.getDisplayName() + "is Signed In");
+            
+            DownLoadImage image=new DownLoadImage();
+            image.execute(account.getPhotoUrl().toString());
             updateUI(true);
         } else {
             updateUI(false);
@@ -170,14 +180,16 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(this, "Please Connect to Wifi", Toast.LENGTH_LONG).show();
+        Toast toast = new Toast(this);
+        toast.makeText(this, "Please Connect to Internet", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-                Toast.makeText(this, "Pressed signed in button", Toast.LENGTH_LONG).show();
                 signIn();
                 break;
             case R.id.sign_out_button:
@@ -197,4 +209,38 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
         Intent i = new Intent(this, MainMenu.class);
         startActivity(i);
     }
+
+
+    protected boolean isOnline(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo= cm.getActiveNetworkInfo();
+        if(netInfo!=null && netInfo.isConnectedOrConnecting()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    class DownLoadImage extends AsyncTask<String, Void, Bitmap> {
+
+        Bitmap bitmap;
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            try {
+                InputStream in=(InputStream) new URL(params[0]).getContent();
+                bitmap = BitmapFactory.decodeStream(in);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            imageView.setImageBitmap(bitmap);
+        }
+    }
+
 }
