@@ -39,7 +39,7 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9000;
-    private CropImageToRound roundedImage;
+    private final String SERVER_URL = "http://rafaytanzeel.com/bookMarket/userMethods.php";
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatus;
     private ProgressDialog mProgressDialog;
@@ -48,9 +48,9 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
     private Button disconnect;
     private Button proceed;
     private ImageView imageView;
-    private Button barcodePage;
-    private final String SERVER_URL="http://rafaytanzeel.com/bookMarket/userMethods.php";
-//    private final String SERVER_URL= "http://rafaytanzeel.com/HackathonFetish/webservice/login.php";
+    private String TokenId;
+
+    //    private final String SERVER_URL= "http://rafaytanzeel.com/HackathonFetish/webservice/login.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,13 +72,11 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
         disconnect = (Button) findViewById(R.id.disconnect_button);
         proceed = (Button) findViewById(R.id.nextPage);
         imageView = (ImageView) findViewById(R.id.profile_image);
-        barcodePage = (Button) findViewById(R.id.barcodePage);
 
         signIn.setOnClickListener(this);
         signOut.setOnClickListener(this);
         disconnect.setOnClickListener(this);
         proceed.setOnClickListener(this);
-        barcodePage.setOnClickListener(this);
 
         signIn = (SignInButton) findViewById(R.id.sign_in_button);
         signIn.setSize(SignInButton.SIZE_STANDARD);
@@ -103,7 +101,6 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
                 }
             });
         }
-
 
 
     }
@@ -167,31 +164,27 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
             GoogleSignInAccount account = result.getSignInAccount();
             mStatus.setText(account.getDisplayName() + " is Signed In");
 
-            String email= account.getEmail();
+            String email = account.getEmail();
             String username = account.getDisplayName();
-            String TokenId = account.getId();
-            Log.d("EMail",email);
-            String photoURL=" ";
-            if(account.getPhotoUrl()!=null){
+            TokenId = account.getId();
+            Log.d("EMail", email);
+            String photoURL = " ";
+            if (account.getPhotoUrl() != null) {
                 photoURL = account.getPhotoUrl().toString();
             }
 
-                RequestPackage p =new RequestPackage();
-                p.setMethod("POST");
-                p.setUri(SERVER_URL);
-                p.setParam("tokenId", TokenId);
-                p.setParam("name", username);
-                p.setParam("email", email);
-                p.setParam("photoUrl", photoURL);
+            RequestPackage p = new RequestPackage();
+            p.setMethod("POST");
+            p.setUri(SERVER_URL);
+            p.setParam("tokenId", TokenId);
+            p.setParam("name", username);
+            p.setParam("email", email);
+            p.setParam("photoUrl", photoURL);
 
-               PostUserData userDatePost=new PostUserData();
-               userDatePost.execute(p);
+            PostUserData userDatePost = new PostUserData();
+            userDatePost.execute(p);
 
-
-
-
-
-            DownLoadImage image=new DownLoadImage();
+            DownLoadImage image = new DownLoadImage();
             image.execute(photoURL.toString());
             updateUI(true);
         } else {
@@ -237,32 +230,24 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
             case R.id.nextPage:
                 goToNextPage();
                 break;
-            case R.id.barcodePage:
-                goToBarcodePage();
-                break;
         }
     }
 
 
     private void goToNextPage() {
         Intent i = new Intent(this, MainMenu.class);
+        i.putExtra("TOKEN_ID", TokenId);
         startActivity(i);
         finish();
     }
 
-    private void goToBarcodePage(){
-        Intent i = new Intent(this, BarcodeScanner.class);
-        startActivity(i);
-    }
 
-
-    protected boolean isOnline(){
+    protected boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo= cm.getActiveNetworkInfo();
-        if(netInfo!=null && netInfo.isConnectedOrConnecting()){
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -270,10 +255,11 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
     class DownLoadImage extends AsyncTask<String, Void, Bitmap> {
 
         Bitmap bitmap;
+
         @Override
         protected Bitmap doInBackground(String... params) {
             try {
-                InputStream in=(InputStream) new URL(params[0]).getContent();
+                InputStream in = (InputStream) new URL(params[0]).getContent();
                 bitmap = BitmapFactory.decodeStream(in);
 
             } catch (IOException e) {
@@ -293,7 +279,7 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
         @Override
         protected Void doInBackground(RequestPackage... params) {
             String jsonData = httpManager.getData(params[0]);
-            Log.d("JSON",jsonData);
+            Log.d("JSON", jsonData);
             return null;
         }
     }
