@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.microsoft.windowsazure.mobileservices.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,6 +47,7 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
     private Button disconnect;
     private Button proceed;
     private ImageView imageView;
+    private MobileServiceClient mClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,11 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+        mClient = new MobileServiceClient(
+                "https://nwhacks001.azure-mobile.net/",
+                "ZkpGveeHyUvgfFWWttjOZslavbAzTJ60",
+                this
+        );
 
         mStatus = (TextView) findViewById(R.id.status);
         signIn = (Button) findViewById(R.id.sign_in_button);
