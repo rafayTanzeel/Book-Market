@@ -92,7 +92,7 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
                         p.setMethod("GET");
                         p.setUri(ISBN);
                         p.setParam("q","isbn:"+"0747532699"/*barcode.displayValue*/);
-                       // ?q=isbn:
+
 
                         ExtractBookData bookInfo = new ExtractBookData();
                         bookInfo.execute(p);

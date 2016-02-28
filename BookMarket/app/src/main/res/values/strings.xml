@@ -12,4 +12,6 @@
     <string name="barcode_success">Barcode read successfully</string>
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
+    <string name="server_client_id">923114686809-6le1oj7bbc088dhdab301ksjcl4dl0fd.apps.googleusercontent.com</string>
+    <string name="id_token_fmt">ID Token: %s</string>
 </resources>
