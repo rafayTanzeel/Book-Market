@@ -26,6 +26,7 @@ public class ActiveActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), UploadActivity.class);
                 startActivity(i);
+                finish();
             }
         });
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
@@ -33,7 +34,7 @@ public class ActiveActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), MainMenu.class);
                 startActivity(i);
-
+                finish();
             }
         });
         mlogOutBtn.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +48,7 @@ public class ActiveActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ChatActivity.class);
                 startActivity(i);
+                finish();
             }
         });
 

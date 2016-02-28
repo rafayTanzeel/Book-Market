@@ -14,28 +14,28 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <Button
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_weight=".2"
 
             android:text = "Search"
             android:id="@+id/searchBtn" />
         <Button
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_weight=".2"
             android:text = "Chat"
             android:id="@+id/chatBtn"
             />
         <Button
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_width="wrap_content"
             android:layout_weight=".2"
             android:text = "Active Sales"
             android:id="@+id/activeBtn"
         />
         <Button
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_width="wrap_content"
             android:text = "Log out"
             android:layout_weight=".2"
