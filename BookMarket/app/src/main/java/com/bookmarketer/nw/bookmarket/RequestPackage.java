@@ -1,5 +1,7 @@
 package com.bookmarketer.nw.bookmarket;
 
+import android.util.Log;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -52,7 +54,10 @@ public class RequestPackage {
         for(String key : params.keySet()){
             String value = null;
             try {
+                Log.d("key", key);
+
                 value = URLEncoder.encode(params.get(key), "UTF-8");
+                Log.d("value",value);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -60,7 +65,7 @@ public class RequestPackage {
             if (sb.length()>0){
                 sb.append('&');
             }
-
+            Log.d("ssss","dddd");
             sb.append(key + "=" + value);
         }
 

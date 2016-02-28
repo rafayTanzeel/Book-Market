@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -46,8 +47,8 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
     private Button disconnect;
     private Button proceed;
     private ImageView imageView;
-
     private Button barcodePage;
+    private final String SERVER_URL="http://rafaytanzeel.com/bookMarket/createMethods.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,11 +161,33 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
 
             String email= account.getEmail();
             String username = account.getDisplayName();
-            String TokenId = account.getIdToken();
+            String TokenId = account.getId();
+            Log.d("EMail",email);
+            Toast.makeText(this, TokenId, Toast.LENGTH_LONG).show();
+            String photoURL="http";
+            if(account.getPhotoUrl()!=null){
+                photoURL = account.getPhotoUrl().toString();
+            }
+
+
+
+                RequestPackage p =new RequestPackage();
+                p.setMethod("POST");
+                p.setUri(SERVER_URL);
+                p.setParam("tokenId", TokenId);
+                p.setParam("name", username);
+                p.setParam("email", email);
+                p.setParam("photoUrl", photoURL);
+
+               PostUserData userDatePost=new PostUserData();
+               userDatePost.execute(p);
+
+
+
 
 
             DownLoadImage image=new DownLoadImage();
-            image.execute(account.getPhotoUrl().toString());
+            image.execute(photoURL.toString());
             updateUI(true);
         } else {
             updateUI(false);
@@ -257,6 +280,16 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             imageView.setImageBitmap(bitmap);
+        }
+    }
+
+    class PostUserData extends AsyncTask<RequestPackage, Void, Void> {
+
+        @Override
+        protected Void doInBackground(RequestPackage... params) {
+            String jsonData = httpManager.getData(params[0]);
+            Log.d("JSON",jsonData);
+            return null;
         }
     }
 
