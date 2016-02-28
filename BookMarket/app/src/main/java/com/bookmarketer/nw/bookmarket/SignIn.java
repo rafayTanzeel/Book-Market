@@ -165,19 +165,16 @@ public class SignIn extends FragmentActivity implements GoogleApiClient.OnConnec
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
-            mStatus.setText(account.getDisplayName() + "is Signed In");
+            mStatus.setText(account.getDisplayName() + " is Signed In");
 
             String email= account.getEmail();
             String username = account.getDisplayName();
             String TokenId = account.getId();
             Log.d("EMail",email);
-            Toast.makeText(this, TokenId, Toast.LENGTH_LONG).show();
-            String photoURL="http";
+            String photoURL=" ";
             if(account.getPhotoUrl()!=null){
                 photoURL = account.getPhotoUrl().toString();
             }
-
-
 
                 RequestPackage p =new RequestPackage();
                 p.setMethod("POST");
