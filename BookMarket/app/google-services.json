@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_id": "book-market-c8b40",
+    "project_number": "923114686809",
+    "name": "Book Market"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923114686809:android:149882114ea3c9f3",
+        "client_id": "android:com.bookmarketer.nw.bookmarket",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.bookmarketer.nw.bookmarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923114686809-ovlggcrdd6saj8n2gh773985r48afibn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bookmarketer.nw.bookmarket",
+            "certificate_hash": "7E19E8AB612A32884567E04B10C1AB0361F82AC5"
+          }
+        },
+        {
+          "client_id": "923114686809-6le1oj7bbc088dhdab301ksjcl4dl0fd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

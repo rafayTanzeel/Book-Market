@@ -13,7 +13,7 @@ public class SignIn extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
     }
 
-    
+
 
     public void move(View view){
         Intent i = new Intent(this, MainMenu.class);
