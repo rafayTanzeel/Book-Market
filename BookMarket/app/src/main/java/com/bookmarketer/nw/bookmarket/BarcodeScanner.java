@@ -9,9 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -21,10 +19,9 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
     // use a compound button so either checkbox or switch widgets work.
 
     private static final String ISBN= "https://www.googleapis.com/books/v1/volumes";
-    private CompoundButton autoFocus;
-    private CompoundButton useFlash;
-    private TextView statusMessage;
-    private TextView barcodeValue;
+    private TextView titleText;
+    private TextView authorText;
+    private TextView summaryText;
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
@@ -34,11 +31,10 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_scanner);
 
-        statusMessage = (TextView)findViewById(R.id.status_message);
-        barcodeValue = (TextView)findViewById(R.id.barcode_value);
+        titleText = (TextView) findViewById(R.id.titleText);
+        authorText = (TextView) findViewById(R.id.authorText);
+        summaryText = (TextView) findViewById(R.id.summaryText);
 
-        autoFocus = (CompoundButton) findViewById(R.id.auto_focus);
-        useFlash = (CompoundButton) findViewById(R.id.use_flash);
 
         findViewById(R.id.read_barcode).setOnClickListener(this);
     }
@@ -53,8 +49,8 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
         if (v.getId() == R.id.read_barcode) {
             // launch barcode activity.
             Intent intent = new Intent(this, BarcodeCaptureActivity.class);
-            intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked());
-            intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
+            intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
+            intent.putExtra(BarcodeCaptureActivity.UseFlash, true);
 
             startActivityForResult(intent, RC_BARCODE_CAPTURE);
         }
@@ -89,7 +85,7 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    statusMessage.setText(R.string.barcode_success);
+
 
                     if(isOnline()) {
                         RequestPackage p =new RequestPackage();
@@ -108,12 +104,12 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
 //                    barcodeValue.setText(barcode.displayValue);
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                 } else {
-                    statusMessage.setText(R.string.barcode_failure);
+                   // statusMessage.setText(R.string.barcode_failure);
                     Log.d(TAG, "No barcode captured, intent data is null");
                 }
             } else {
-                statusMessage.setText(String.format(getString(R.string.barcode_error),
-                        CommonStatusCodes.getStatusCodeString(resultCode)));
+              //  statusMessage.setText(String.format(getString(R.string.barcode_error),
+               //         CommonStatusCodes.getStatusCodeString(resultCode)));
             }
         }
         else {
@@ -144,9 +140,13 @@ public class BarcodeScanner extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(BookInfo s) {
-            String str=s.getAuthors()+"\n"+s.getDesc()+"\n"+s.getPubDate()+"\n"+s.getPublisher()+"\n"+s.getThumb()+"\n"+s.getTitle();
-            barcodeValue.setText(str);
-//            JSONArray jarry= new JSONArray(s);
+
+            findViewById(R.id.read_barcode).setVisibility(View.INVISIBLE);
+            findViewById(R.id.submit_book).setVisibility(View.VISIBLE);
+
+            titleText.setText(s.getTitle());
+            authorText.setText(s.getAuthors());
+            summaryText.setText(s.getDesc());
 
         }
     }
