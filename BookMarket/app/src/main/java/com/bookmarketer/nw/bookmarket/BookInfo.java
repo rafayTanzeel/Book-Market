@@ -9,6 +9,15 @@ public class BookInfo {
     private String authors;
     private String publisher;
     private String pubDate;
+    private int price;
+    private String mseller;
+    public BookInfo(String ti, String au, String pub, String se, int pr){
+        title = ti;
+        authors = au;
+        publisher = pub;
+        mseller = se;
+        price = pr;
+    }
 
     public String getTitle() {
         return title;

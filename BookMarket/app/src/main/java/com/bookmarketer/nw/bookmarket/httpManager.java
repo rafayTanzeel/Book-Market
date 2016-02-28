@@ -31,8 +31,7 @@ public class httpManager {
             if(p.getMethod().equals("POST")){
                 con.setDoOutput(true);
                 OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());
-                Log.d("lo","lop");
-                writer.write(p.getEncodedParams());
+               writer.write(p.getEncodedParams());
                 writer.flush();
             }
             StringBuilder sb= new StringBuilder();
@@ -40,9 +39,8 @@ public class httpManager {
             String line;
             while((line = br.readLine())!=null){
                 sb.append(line + "\n");
-                Log.d("sjdd",line);
+
             }
-            Log.d("lo",sb.toString());
             return sb.toString();
 
         } catch (MalformedURLException e) {
